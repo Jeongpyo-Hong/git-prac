@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <title>로또추첨기</title>
+  <style>
+    .ball {
+      display: inline-block;
+      border: 1px solid black;
+      border-radius: 20px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 20px;
+      text-align: center;
+      margin-right: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="result">추첨 결과는? </div>
+  <div id="bonus">보너스: </div>
+  <script>
+      function colorize(number, $tag) {
+        if (number < 10) {
+          $tag.style.backgroundColor = 'red';
+          $tag.style.color = 'white';
+        } else if (number < 20) {
+          $tag.style.backgroundColor = 'orange';
+        } else if (number < 30) {
+          $tag.style.backgroundColor = 'yellow';
+        } else if (number < 40) {
+          $tag.style.backgroundColor = 'green';
+          $tag.style.color = 'white';
+        } else {
+          $tag.style.backgroundColor = 'blue';
+          $tag.style.color = 'white';
+        }
+      }
+
+    const candidate = Array(45).fill().map((v, i) => i + 1); // fill() 비어있을 때는 undefined로 채워짐, index부분에 1씩 더해짐
+    // ▼ ▼ ▼ 피셔-예이츠 셔플(fisher-Yates Shuffle) 이라는 알고리즘 사용
+    const shuffle = [];
+    while (candidate.length > 0) { // 정확히 몇 번 반복할지 모를 땐 while이 for보다 나음
+      const random = Math.floor(Math.random() * candidate.length); // 무작위로 인덱스 뽑기
+      const spliceArray = candidate.splice(random, 1); // 뽑은 값은 배열에 들어감
+      const value = spliceArray[0]; // 배열에 들어 있는 값을 꺼내서
+      shuffle.push(value); // shuffle 배열에 넣기
+    }
+    console.log(shuffle);
+    const winBalls = shuffle.slice(0,6).sort((a, b) => a - b); // splice는 원본을 수정, slice는 원본 유지 / sort 를 사용하여 오름차순으로 정렬
+    const bonus = shuffle[6]
+    console.log(winBalls, bonus);
+
+    // 특정 시간 후에 시작 / 1초 = 1000(ms) 3초 = 3000(ms)
+    const $result = document.querySelector('#result');
+
+    const drawBall = (number, $target) => {
+      const $ball = document.createElement('div');
+      $ball.className = 'ball';
+      colorize(number, $ball);
+      $ball.textContent = number;
+      $target.appendChild($ball);
+    };
+    // [0, 1, 2, 3, 4, 5, 6] -> [1000, 2000, 3000, 4000, 5000, 6000] 초로 만들어주는 것이니깐,,
+     for ( let i = 0; i < winBalls.length; i++) {
+      setTimeout(() => {
+        drawBall(winBalls[i], $result);
+      }, (i + 1) * 1000);
+     }
+     
+    const $bonus = document.querySelector('#bonus');
+     setTimeout(() => {
+        drawBall(bonus, $bonus);
+      }, 7000);
+  </script>
+</body>

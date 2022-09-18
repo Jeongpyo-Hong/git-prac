@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>끝말잇기</title>
+    <style></style>
+  </head>
+  <body>
+    <div><span id="order">1</span>번째 참가자</div>
+    <div>제시어: <span id="word"></span></div>
+    <input type="text" />
+    <button>입력</button>
+
+    <script>
+      const number = Number(prompt("몇 명이 참가하나요?"), 10); // prompt는 문자열이므로 parseInt 또는 Number를 사용하여 숫자로 변환, 10은 10진법임
+      const $button = document.querySelector("button");
+      const $input = document.querySelector("input");
+      const $word = document.querySelector("#word");
+      const $order = document.querySelector("#order");
+
+      let word; // 제시어
+      let newWord; // 새로 입력한 단어
+
+      const onClcikButton = () => {
+        if (!word || word[word.length - 1] === newWord[0]) {
+          // 제시어가 비어 있거나 입력한 단어가 올바르지 않은가?
+          // 비어 있다
+          word = newWord; // 입력한 단어가 제시어가 된다
+          $word.textContent = word;
+          const order = Number($order.textContent);
+          if (order + 1 > number) {
+            // 현재 순서에서 1을 더한 값이 order 보다 크면
+            $order.textContent = 1;
+          } else {
+            $order.textContent = order + 1;
+          }
+        } else {
+          // 비어 있지 않다
+          // 올바르지 않음
+          alert("올바르지 않은 단어입니다.");
+        }
+        $input.value = ""; // 대부분은 textContent 사용, 일부만 value 사용
+        $input.focus(); // 입력창에 커서 활성화
+      };
+
+      const onInput = () => {
+        newWord = event.target.value;
+      };
+
+      $button.addEventListener("click", onClcikButton);
+      $input.addEventListener("input", onInput);
+
+      // const yesOrNo = confirm('맞나요?'); // yes or no 로 확인하는 창 띄움
+      // 위 세 가지  prompt, alert, confirm은 실제로는 잘 사용하지 않음!
+
+      // 버튼 태그를 $button 이라는 변수에 넣음 (태그를 변수에 넣는 경우, 변수명에 $달려 넣으면 좋음, $$ 달러 두 개는 태그 여러 개)
+      // querySelectorAll 이 태그 여러 개 있는 경우 사용
+
+      // document.querySelector('input').addEventListener('input', function(event) { //function() 함수 대신 => 화살표로 대체 가능 but, 약간의 기능 차이 있음
+      //   console.log('글자 입력', event.target.value); //funtion 괄호에 event 넣어주고 콘솔에 event.target.vlaue 넣어주면 사용자가 입력한 값이 콘솔창에 나옴
+      // });
+      // // const onClick = function(); <<< 여러 번 사용 될 때는 이런식으로 변수 지정하여 사용하면 편함
+      // // addEventListner 에서 onclick (o) / onclick() (x) 함수 자리이므로 괄호 넣으면 안 됨
+      // document.querySelector('button').addEventListener('click', function() {
+      //   console.log('버튼 클릭')
+      // });
+    </script>
+  </body>
+</html>

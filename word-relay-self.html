@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쿵쿵따</title>
+  </head>
+  <body>
+    <div><span id="order">1</span>번째 참가자</div>
+    <div>제시어: <span id="word"></span></div>
+    <input type="text" />
+    <button>입력</button>
+
+    <script>
+      const number = Number(prompt("몇 명이 참가하나요?"), 10); // 참가자 인원 확인창 띄우기(prompt), 문자열 숫자로 변환(Number)
+
+      if (number) {
+        const $word = document.querySelector("#word");
+        const $order = document.querySelector("#order");
+        const $input = document.querySelector("input");
+        const $button = document.querySelector("button");
+
+        let word; // 제시어
+        let newWord; // 이어서 입력한 단어
+
+        const onClcikButton = () => {
+          if (
+            (!word || word[word.length - 1] === newWord[0]) &&
+            newWord.length === 3
+          ) {
+            // (제시어가 입력되지 않거나, 제시어 처음과 입력값 처음이 일치하고) 3글자가 맞다면
+            word = newWord; // 제시어가 이어서 입력한 단어로 변경
+            $word.textContent = word;
+            const order = Number($order.textContent); // 현재 순서
+            if (order + 1 > number) {
+              $order.textContent = 1;
+            } else {
+              $order.textContent = order + 1;
+            }
+          } else {
+            alert("세 글자 단어가 아니거나, 올바르지 않은 단어입니다!");
+          }
+          $input.value = ""; // 입력창 비워주기
+          $input.focus(); // 입력창 커서 생성
+        };
+
+        const onInput = () => {
+          newWord = event.target.value;
+        };
+
+        $button.addEventListener("click", onClcikButton); // button에 click 이벤트 생성
+        $input.addEventListener("input", onInput); // input에 input 이벤트 생성
+      }
+    </script>
+  </body>
+</html>
